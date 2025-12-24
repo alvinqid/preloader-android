@@ -4,6 +4,7 @@
 struct AndroidContextPaths {
   std::string cacheDir;
   std::string modsDir;
+  std::string externalFilesDir;
 };
 
 namespace AndroidUtils {
