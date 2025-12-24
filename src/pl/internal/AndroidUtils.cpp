@@ -89,6 +89,13 @@ AndroidContextPaths AndroidUtils::FetchContextPaths(JNIEnv *env) {
     env->DeleteLocalRef(cacheDir);
   }
 
+  jmethodID get_external_files_dir = env->GetMethodID(contextClass, "getExternalFilesDir", "(Ljava/lang/String;)Ljava/io/File;");
+  jobject externalFilesDir = env->CallObjectMethod(appContext, get_external_files_dir, NULL);
+  if (externalFilesDir) {
+    paths.externalFilesDir = GetAbsolutePath(env, externalFilesDir);
+    env->DeleteLocalRef(externalFilesDir);
+  }
+
   paths.modsDir = GetSelectedModsDir(env, appContext);
 
   env->DeleteLocalRef(contextClass);
