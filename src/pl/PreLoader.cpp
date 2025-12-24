@@ -16,6 +16,7 @@ JavaVM *g_vm = nullptr;
 
 static std::string g_modsDir;
 static std::string g_cacheDir;
+static std::string g_externalFilesDir;
 static bool g_modsInitialized = false;
 
 static void (*onCreate)(ANativeActivity*, void*, size_t) = nullptr;
@@ -24,6 +25,17 @@ static void (*androidMain)(struct android_app*) = nullptr;
 
 extern "C" {
 
+const char* pl_get_mods_dir() {
+    return g_modsDir.empty() ? nullptr : g_modsDir.c_str();
+}
+
+const char* pl_get_cache_dir() {
+    return g_cacheDir.empty() ? nullptr : g_cacheDir.c_str();
+}
+
+const char* pl_get_externalFiles_dir() {
+    return g_externalFilesDir.empty() ? nullptr : g_externalFilesDir.c_str();
+}
 
 JNIEXPORT void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_t savedStateSize) {
     if (onCreate) {
@@ -56,6 +68,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     auto paths = AndroidUtils::FetchContextPaths(env);
     g_modsDir = paths.modsDir;
     g_cacheDir = paths.cacheDir;
+    g_externalFilesDir = paths.externalFilesDir;
 
     return JNI_VERSION_1_4;
 }
