@@ -18,6 +18,7 @@ static std::string g_modsDir;
 static std::string g_cacheDir;
 static std::string g_externalFilesDir;
 static bool g_modsInitialized = false;
+static bool g_isLoaded = false;
 
 static void (*onCreate)(ANativeActivity*, void*, size_t) = nullptr;
 static void (*onFinish)(ANativeActivity*) = nullptr;
@@ -33,8 +34,12 @@ const char* pl_get_cache_dir() {
     return g_cacheDir.empty() ? nullptr : g_cacheDir.c_str();
 }
 
-const char* pl_get_externalFiles_dir() {
+const char* pl_get_minecraft_data_dir() {
     return g_externalFilesDir.empty() ? nullptr : g_externalFilesDir.c_str();
+}
+
+bool pl_is_loaded() {
+    return g_isLoaded();
 }
 
 JNIEXPORT void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_t savedStateSize) {
@@ -69,6 +74,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     g_modsDir = paths.modsDir;
     g_cacheDir = paths.cacheDir;
     g_externalFilesDir = paths.externalFilesDir;
+    g_isLoaded = true;
 
     return JNI_VERSION_1_4;
 }
