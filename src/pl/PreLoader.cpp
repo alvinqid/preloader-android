@@ -39,7 +39,7 @@ const char* pl_get_minecraft_data_dir() {
 }
 
 bool pl_is_loaded() {
-    return g_isLoaded();
+    return g_isLoaded;
 }
 
 JNIEXPORT void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_t savedStateSize) {
